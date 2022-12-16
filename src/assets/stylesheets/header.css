@@ -1,0 +1,41 @@
+.header {
+    width: 100%;
+    padding: 15px 0;
+}
+
+.header .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header .logo {
+    height: 60px;
+}
+.header .logo a {
+    height: 100%;
+    display: flex;
+    align-items: end;
+}
+.header .logo a > img {
+    width: 60px;
+    height: 100%;
+}
+
+.header .logo a > span {
+    font-family: cursive;
+    font-size: 30px;
+}
+
+.header .auth-menu .auth-main-menu {
+    list-style: none;
+}
+
+.auth-main-menu li {
+    display: inline-block;
+    margin-right: 10px;
+}
+.auth-main-menu li a {
+    display: block;
+    padding: 10px;
+}
