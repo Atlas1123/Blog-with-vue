@@ -1,12 +1,55 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { createStore } from "vuex";
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
-  }
+export default createStore({
+  state: {
+    hideConfigButton: false,
+    isPinned: true,
+    showConfig: false,
+    sidebarType: "bg-white",
+    isRTL: false,
+    mcolor: "",
+    darkMode: false,
+    isNavFixed: false,
+    isAbsolute: false,
+    showNavs: true,
+    showSidenav: true,
+    showNavbar: true,
+    showFooter: true,
+    showMain: true,
+    layout: "default"
+  },
+  mutations: {
+    toggleConfigurator(state) {
+      state.showConfig = !state.showConfig;
+    },
+    navbarMinimize(state) {
+      const sidenav_show = document.querySelector(".g-sidenav-show");
 
-  return { count, doubleCount, increment }
-})
+      if (sidenav_show.classList.contains("g-sidenav-hidden")) {
+        sidenav_show.classList.remove("g-sidenav-hidden");
+        sidenav_show.classList.add("g-sidenav-pinned");
+        state.isPinned = true;
+      } else {
+        sidenav_show.classList.add("g-sidenav-hidden");
+        sidenav_show.classList.remove("g-sidenav-pinned");
+        state.isPinned = false;
+      }
+    },
+    sidebarType(state, payload) {
+      state.sidebarType = payload;
+    },
+    navbarFixed(state) {
+      if (state.isNavFixed === false) {
+        state.isNavFixed = true;
+      } else {
+        state.isNavFixed = false;
+      }
+    }
+  },
+  actions: {
+    toggleSidebarColor({ commit }, payload) {
+      commit("sidebarType", payload);
+    }
+  },
+  getters: {}
+});

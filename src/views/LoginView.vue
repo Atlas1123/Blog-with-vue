@@ -1,53 +1,63 @@
+<script setup lang="ts">
+import * as Yup from 'yup';
+import { Form, Field } from 'vee-validate';
+import { useAuthStore } from '@/stores';
+
+import { RouterLink } from 'vue-router';
+
+import '../assets/stylesheets/auth.css'
+
+const schema = Yup.object().shape({
+    email: Yup.string()
+        .required('email is required'),
+    password: Yup.string()
+        .required('password is required')
+});
+type InputVal = {
+    email: "",
+    password: ""
+}
+
+async function onSubmit(values: InputVal) {
+    const authStore = useAuthStore();
+
+    try {
+        const { email, password } = values;
+        await authStore.login(email, password);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+</script>
 <template>
-    <div>
-        <h2>Login</h2>
-        <form @submit.prevent="handleSubmit">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" v-model="email" name="email" class="form-control" :class="{ 'is-invalid': submitted && !email }" />
-                <div v-show="submitted && !email" class="invalid-feedback">email is required</div>
+    <div class="page-container">
+        <div class="auth-container">
+            <h2 class="auth-page-title">Login</h2>
+            <div class="row">
+                <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <Field name="email" type="text" class="form-control" placeholder="email" :class="{ 'is-invalid': errors.email }" />
+                            <div class="invalid-feedback">{{ errors.email }}</div>
+                        </div>
+                        <div class="form-group">
+                            <Field name="password" type="password" class="form-control" placeholder="Password" :class="{ 'is-invalid': errors.password }" />
+                            <div class="invalid-feedback">{{ errors.password }}</div>
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-info btn-lg" :disabled="isSubmitting">
+                                <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+                                Login
+                            </button>
+                        </div>
+                        <div class="other-link">
+                            <span>If you don't have an account, click here   </span>
+                            <RouterLink to="/register" class="color-g">Register</RouterLink>
+                        </div>
+                    </div>
+                </Form>
             </div>
-            <div class="form-group">
-                <label htmlFor="password">Password</label>
-                <input type="password" v-model="password" name="password" class="form-control" :class="{ 'is-invalid': submitted && !password }" />
-                <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary" :disabled="status.loggingIn">Login</button>
-                <img v-show="status.loggingIn" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                <router-link to="/register" class="btn btn-link">Register</router-link>
-            </div>
-        </form>
+        </div>
     </div>
 </template>
-
-<script>
-import { mapState, mapActions } from 'vuex'
-
-export default {
-    data () {
-        return {
-            email: '',
-            password: '',
-            submitted: false
-        }
-    },
-    computed: {
-        ...mapState('account', ['status'])
-    },
-    created () {
-        // reset login status
-        // this.logout();
-    },
-    methods: {
-        ...mapActions('account', ['login', 'logout']),
-        handleSubmit (e) {
-            this.submitted = true;
-            const { email, password } = this;
-            if (email && password) {
-                this.login({ email, password })
-            }
-        }
-    }
-};
-</script>

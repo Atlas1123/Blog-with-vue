@@ -25,6 +25,7 @@
 .header .logo a > span {
     font-family: cursive;
     font-size: 30px;
+    color: #34495e;
 }
 
 .header .auth-menu .auth-main-menu {
@@ -38,4 +39,8 @@
 .auth-main-menu li a {
     display: block;
     padding: 10px;
+    color: #34495e;
+}
+.auth-main-menu li a:hover {
+    text-decoration: underline;
 }

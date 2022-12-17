@@ -12,10 +12,16 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "axios": "^1.2.1",
+    "bootstrap": "^5.2.3",
+    "bootstrap-vue": "^2.23.1",
     "pinia": "^2.0.28",
+    "vee-validate": "^4.7.3",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
-    "vuex": "^4.1.0"
+    "vue-toastification": "^2.0.0-rc.5",
+    "vuex": "^4.1.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
@@ -36,5 +42,10 @@
     "vite": "^4.0.0",
     "vitest": "^0.25.6",
     "vue-tsc": "^1.0.12"
+  },
+  "proxy": {
+    "/api/vi/": {
+      "target": "http://localhost:8001"
+    }
   }
 }
